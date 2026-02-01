@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/user");
+const User  = require("../models/user");
 module.exports.userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
@@ -14,7 +14,7 @@ module.exports.userAuth = async (req, res, next) => {
       throw new Error("Login First!");
     }
 
-    const user = await userModel.findById({ _id: decodedData._id });
+    const user = await User .findById({ _id: decodedData._id });
 
     if (!user) {
       throw new Error("No such user find");
