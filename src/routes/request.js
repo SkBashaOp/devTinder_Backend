@@ -23,6 +23,12 @@ requestRouter.post(
           .json({ message: "Invalid status type: " + status });
       }
 
+      if (fromUserId.toString() === toUserId) {
+        return res.status(400).json({
+          message: "You cannot send a request to yourself",
+        });
+      }
+
       const toUser = await User.findById(toUserId);
       if (!toUser) {
         return res.status(404).json({ message: "User not found!" });
@@ -48,17 +54,16 @@ requestRouter.post(
 
       const data = await connectionRequest.save();
 
-      const emailRes = await sendEmail.run(
+      await sendEmail.run(
         "A new friend request from " + req.user.firstName,
-        req.user.firstName + " is " + status + " in " + toUser.firstName
+        `${req.user.firstName} is ${status} in ${toUser.firstName}`
       );
-      console.log(emailRes);
-
       res.json({
-        message:
-          req.user.firstName + " is " + status + " in " + toUser.firstName,
+        message: `${req.user.firstName} is ${status} in ${toUser.firstName}`,
         data,
       });
+
+      
     } catch (err) {
       res.status(400).send("ERROR: " + err.message);
     }
