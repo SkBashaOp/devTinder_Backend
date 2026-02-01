@@ -63,7 +63,12 @@ authRouter.post("/login", async (req, res) => {
       const token = await user.getJWT();
 
       // adding token to cookie
-      res.cookie("token", token, { maxAge: 60000 * 60 * 24 * 7 });
+      res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",   
+      secure: false,     
+      maxAge: 1000 * 60 * 60 * 24 * 7
+      });
       res.json({ message: "Login successfuly!", loginUser: user });
     } else {
       throw new Error("Invalid credentials.");
@@ -74,7 +79,12 @@ authRouter.post("/login", async (req, res) => {
 });
 
 authRouter.post("/logout", async (req, res) => {
-  res.cookie("token", null, { maxAge: 0 }).send("You are logged out now!!");
+  res.cookie("token", "", {
+  httpOnly: true,
+  sameSite: "lax",
+  secure: false,
+  maxAge: 0
+}).send("You are logged out now!!");
 });
 
 module.exports = authRouter;
