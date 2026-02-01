@@ -29,7 +29,12 @@ authRouter.post("/signup", async (req, res) => {
     const token = await user.getJWT();
 
     // adding token to cookie
-    res.cookie("token", token, { maxAge: 60000 * 60 * 24 * 7 });
+    res.cookie("token", token, {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+    sameSite: "lax",     // 🔥 IMPORTANT
+    secure: false        // because you're using HTTP (IP based)
+    });
 
     res
       .status(200)
