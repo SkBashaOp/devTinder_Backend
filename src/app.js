@@ -9,7 +9,7 @@ const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "http://98.88.31.96:5173",
   credentials: true
 }));
 
@@ -25,7 +25,7 @@ app.use("/", userRouter);
 connectDb()
   .then(() => {
     console.log("Db is connected");
-    app.listen(3000, () => {
+    app.listen(3000, "0.0.0.0",() => {
       console.log("Server is running on port 3000...");
     });
   })
