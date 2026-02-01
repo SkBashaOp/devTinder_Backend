@@ -9,7 +9,7 @@ const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 
 app.use(cors({
-  origin: "http://98.88.31.96:5173",
+  origin: "*",
   credentials: true
 }));
 
@@ -21,6 +21,9 @@ app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.get("/api/health", (req, res) => {
+  res.json({ status: "OK", env: "production" });
+});
 
 connectDb()
   .then(() => {
